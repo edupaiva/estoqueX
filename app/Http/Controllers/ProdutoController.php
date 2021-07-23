@@ -1,6 +1,8 @@
 <?php
 
 namespace estoque\Http\Controllers;
+
+use estoque\Http\Requests\ProdutosRequest;
 use Request;
 //use Illuminate\Http\Request;
 
@@ -8,50 +10,65 @@ use Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Console\ViewClearCommand;
 use Illuminate\Support\Facades\DB;
-
+use estoque\Produto;
 
 
 class ProdutoController extends Controller
 {
-    public function add(){
+    
+
+   
+
+    
+
+     public function lista(){
+         
+        $produtos = Produto::orderBy('nome')->paginate(5);
+         return view('produto.listagem')
+            ->with('produtos', $produtos);
+
+   }
+   public function formularioCadastro(){
         return view('produto.formulario');
     }
 
-    public function adiciona(){
-       // $nome = Request::input('nome'); 
-        //$descricao = Request::input('descricao'); 
-        //$valor = Request::input('valor'); 
-        //$quantidade = Request::input('quantidade');
-        //return implode( ', ', array($nome, $descricao, $valor, $quantidade));
-        return view('produto.adicionado');
+    public function adiciona(ProdutosRequest $request){
+        
+           
+
+        Produto::create($request::all()) ;
+        return redirect()
+            ->action('ProdutoController@lista')
+            ->withInput(Request::only('nome'));
     }
 
-    public function lista(){
-        
-        $produtos = DB::select('select * from produtos');
-         return view('produto.listagem')->with('produtos', $produtos);
-
-   }
-
-
-
     public function mostra($id){
-       // $id = Request::route('id');
-        $resposta = DB::select('select * from produtos where id = ?',[$id]);
-        
-
-        if(empty($resposta)){
+        $produto = Produto::find($id);
+        if(empty($produto)){
             return "Esse produto não existe";
         }else{
-            return view('produto.detalhes')->with('p', $resposta[0]);
+            return view('produto.detalhes')
+                ->with('p', $produto);
         }
     }
 
-    public function delete(){
+    public function remove($id){
+        $produto = Produto::find($id);
+        $produto->delete();
+
+        return redirect()
+            ->action('ProdutoController@lista');
+
 
     }
 
-    public function update(){
+    public function atualizar($id){
+        $produto = Produto::find($id);
+        $produto->update();
+        
+        return redirect()
+            ->action('ProdutoController@lista')
+            ->withInput(Request::only('nome'));
 
     }
 }

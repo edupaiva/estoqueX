@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="/css/custom.css">
          <title>@yield('titulo')</title>
     </head>
 <body>
@@ -16,6 +16,7 @@ Estoque Laravel
 </div>
 <ul class="nav navbar-nav navbar-right">
 <li><a href="/produtos">Listagem</a></li>
+<li><a href="/produtos/novo">Novo</a></li>
 </ul>
 </div>
 </nav>

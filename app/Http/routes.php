@@ -11,7 +11,8 @@
 |
 */
 
-
+Route::get('home', 'HomeController@index'); 
+Route::controllers([ 'auth' => 'Auth\AuthController', 'password' => 'Auth\PasswordController', ]);
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,5 +21,25 @@ Route::get('/', function () {
 //==================================
 
 Route::get('/produtos', "ProdutoController@lista");
+Route::get('/produtos/novo', "ProdutoController@formularioCadastro");
+Route::post('/produtos/adiciona', "ProdutoController@adiciona");
 Route::get('/produtos/mostra/{id}', "ProdutoController@mostra")->where('id', '[0-9]+');
-Route::post('/produtos/add', "ProdutoController@add");
+Route::get('/produtos/remove/{id}', "ProdutoController@remove");
+Route::get('/produtos/atualizar/{id}', "ProdutoController@atualizar");
+Route::get('/login', "LoginController@login");
+
+/*Route::namespace('api')->prefix('produtos')->group( function(){
+
+Route::group(['namespace' => 'api', 'prefix' => 'produtos'], function() {
+    Route::get('/', 'ProdutosController@index');
+    Route::get('/{id}', 'ProdutosController@me');
+    Route::post('/', 'ProdutosController@save');
+});*/
+
+//funcionado normal
+Route::get('api/produtos', 'api\ProdutosController@index');
+Route::post('api/produtos', 'api\ProdutosController@save');
+Route::get('api/produtos/{id}', 'api\ProdutosController@me');
+Route::put('api/produtos', 'api\ProdutosController@update');
+Route::patch('api/produtos', 'api\ProdutosController@update');
+Route::delete('api/produtos/{id}', 'api\ProdutosController@delete');
